@@ -20,7 +20,7 @@ def signup_user(request):
             return render(request, "accounts/signup.html", {"form": form})
     return render(request, "accounts/signup.html", {"form": form})
 
-
+# Login ser
 def login_user(request):
     if request.user.is_authenticated:
         return redirect("home")
