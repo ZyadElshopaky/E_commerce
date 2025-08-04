@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Product List {% endblock %}
+
+{% block contents %} 
+<div style="padding-top:0px">
+
+  <div class="dashboard-header">
+    <h1 style="color:white;">Welcome {{user.username}}</h1>
+    <p>id {{user.id}}</p>
+    <!-- <p>Manage your store, products, and orders</p> -->
+  </div>
+
+  <div class="container dashboard-section">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h4>Orders Summary</h4>
+          <p>You've received <strong>25</strong> orders this week.</p>
+          <a href="#" class="btn btn-sm btn-custom">View Orders</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h4>Manage Products</h4>
+          <p>You have <strong>12</strong> active products.</p>
+          <a href="#" class="btn btn-sm btn-custom">Go to Products</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h4>Messages</h4>
+          <p>You have <strong>3</strong> new messages.</p>
+          <a href="#" class="btn btn-sm btn-custom">Check Inbox</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h4>Earnings</h4>
+          <p>This month's earnings: <strong>$1,200</strong></p>
+          <a href="#" class="btn btn-sm btn-custom">View Details</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h4>Add New Product</h4>
+          <p>Ready to launch a new product?</p>
+          <a href="#" class="btn btn-sm btn-custom">Add Product</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h4>Customer Reviews</h4>
+          <p>You received <strong>15</strong> new reviews this month.</p>
+          <a href="#" class="btn btn-sm btn-custom">View Reviews</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

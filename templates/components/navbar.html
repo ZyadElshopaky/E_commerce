@@ -1,0 +1,76 @@
+{% if request.path != '/login/' and request.path != '/signup/' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top custom-navbar">
+  <div class="container-fluid position-relative">
+
+    <a class="navbar-brand custom-logo" href="{% url 'home' %}">E-commerce</a>
+
+    <a class="nav-link custom-nav-link ms-3" href="{% url 'home' %}">
+      <i class="fas fa-home me-1 "></i> Home
+    </a>
+
+    <a class="nav-link custom-nav-link ms-4" href="{% url 'products' %}">
+      <i class="fas fa-th-large me-1"></i> Products
+    </a>
+    
+    <a class="nav-link custom-nav-link ms-4" href="{% url 'contact_us' %}">
+      <i class="fas fa-envelope me-1"></i> Contact Us
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <form class="position-absolute start-50 top-50 translate-middle" method="get" action="{% url 'home' %}">
+      <div class="input-group">
+        <input type="search" name="q" class="form-control border-danger custom-placeholder"
+          placeholder="Search products" aria-label="Search">
+        <button class="btn btn-outline-danger" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+      <ul class="navbar-nav gap-3 align-items-center">
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'orders' %}">
+            <i class="fas fa-box me-1"></i> Orders
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'cart' %}">
+            <i class="fas fa-shopping-cart me-1"></i> Cart
+          </a>
+        </li>
+        
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a href="{% url 'logout' %}" class="btn btn-danger btn-lg">
+              <i class="fas fa-user me-1"></i> log out
+            </a>
+        </li>
+      {% else %}
+        <!-- <li class="nav-item">
+          <a href="{% url 'signup' %}" class="btn btn-danger btn-lg">
+            <i class="fas fa-user me-1"></i> Sign Up
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a href="{% url 'login' %}" class="btn btn-danger btn-lg">
+            <i class="fas fa-user me-1"></i> log in
+          </a>
+        </li>
+      {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% endif %}

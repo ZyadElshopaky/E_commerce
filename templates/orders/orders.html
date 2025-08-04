@@ -1,0 +1,43 @@
+
+{% extends 'base.html' %}
+{% block title %}Orders{% endblock %}
+
+{% block contents %}
+<div class="container py-5">
+  <h1>My Orders</h1>
+  <div id="orders-container">
+
+  <script>
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    const container = document.getElementById("orders-container");
+
+    if (orders.length === 0) {
+      container.innerHTML = "<h3>No orders found.</h3>";
+    }
+    else {
+      orders.forEach((product, index) => {
+        const card = document.createElement("div");
+        card.className = "order-card";
+
+        card.innerHTML = 
+         ` <img src="${product.thumbnail}" alt="${product.title}">
+          <div class="order-info">
+            <h3>${product.title}</h3>
+            <p>${product.description}</p>
+            <p><strong>Price:</strong> $${product.price}</p>
+            <button class="remove-btn" onclick="removeOrder(${index})">Cancel</button>
+          </div>`
+        ;
+
+        container.appendChild(card);
+      });
+    }
+
+    function removeOrder(index) {
+      let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      orders.splice(index, 1);
+      localStorage.setItem("orders", JSON.stringify(orders));
+      location.reload();
+    }
+  </script>
+{% endblock %}

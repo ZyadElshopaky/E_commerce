@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Product List {% endblock %}
+
+{% block contents %} 
+<div style="padding-top:150px">
+
+<div class="bg-white shadow-sm py-3 position-fixed w-100 z-2 mt-5" style="top: 56px;">
+  <div class="container d-flex justify-content-center gap-5 flex-wrap">
+    <a href="#" class="category-link">
+      <i class="fas fa-paint-brush text-danger"></i> <span>Makeup</span>
+    </a>
+    <a href="#" class="category-link">
+      <i class="fas fa-spa text-danger"></i> <span>Skincare</span>
+    </a>
+    <a href="#" class="category-link">
+      <i class="fas fa-spray-can-sparkles text-danger"></i> <span>Fragrance</span>
+    </a>
+    <a href="#" class="category-link">
+      <i class="fas fa-tools text-danger"></i> <span>Tools</span>
+    </a>
+  </div>
+</div>
+
+  <div class="container py-5">
+    <h1 class="text-center mb-5">Our products</h1>
+
+      <div class="d-flex flex-wrap gap-2 justify-content-between">
+        {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            <a href="{% url 'products_details' product.id %}"><img src="{{ product.thumbnail }}" class="card-img-top" alt="{{product.title}}"></a>
+            <div class="card-body">
+                <p class="card-text" id="text">{{ product.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+      </div>  
+  </div>
+</div>
+{% endblock %}

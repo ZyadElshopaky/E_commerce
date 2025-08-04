@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Product List {% endblock %}
+
+{% block contents %} 
+<div style="padding-top:250px">
+
+    <div class="role-container">
+    <h2>Select Your Role</h2>
+    <div class="role-buttons">
+      <a href="{% url 'products' %}" class="role-button">
+        <i class="fas fa-shopping-cart"></i>
+        Buyer
+      </a>
+      <a href="{% url 'seller' %}" class="role-button">
+        <i class="fas fa-store"></i>
+        Seller
+      </a>      <a href="{% url 'contact_us' %}" class="role-button">
+        <i class="fas fa-user-shield"></i>
+        Admin
+      </a>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

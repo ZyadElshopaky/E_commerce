@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block show_navbar %}{% endblock %}
+{% block contents %}
+
+<div class="contain">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert 
+    {% if message.tags %}
+      alert-{{ message.tags }} 
+    {% else %}
+      alert-info
+    {% endif %} 
+    alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="cards">
+    <h2>Sign In</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-custom login-btn mt-3 w-50">Log in</button>
+      </div>
+    </form>
+    <div class="signup-link">
+      Don't have an account? <a href="{%url 'signup'%}">Sign up here</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
