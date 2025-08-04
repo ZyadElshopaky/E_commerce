@@ -60,8 +60,6 @@ def logout_user(request):
     logout(request)
     return redirect("home")
 
-def home(request):
-    return render(request,"home.html")
 
 @login_required(login_url="login")
 def select_role_view(request):
