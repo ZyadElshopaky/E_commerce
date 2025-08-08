@@ -28,7 +28,7 @@
       <div class="d-flex flex-wrap gap-2 justify-content-between">
         {% for product in products %}
         <div class="card" style="width: 18rem;">
-            <a href="{% url 'products_details' product.id %}"><img src="{{ product.thumbnail }}" class="card-img-top" alt="{{product.title}}"></a>
+            <a href="{% url 'products_details' product.id %}"><img src="{{ product.image.url }}" class="card-img-top" alt="{{product.title}}"></a>
             <div class="card-body">
                 <p class="card-text" id="text">{{ product.description }}</p>
             </div>

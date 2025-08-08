@@ -28,14 +28,13 @@
       <li><a href="#"><i class="fas fa-tools"></i><span> Tools</span></a></li>
     </ul>
 </div>
-
 <div class="page-content">
   <div class="container py-5">
     <h1 class="text-center mb-5">Our products</h1>
     <div class="d-flex flex-wrap gap-2 justify-content-between">
         {% for product in products %}
         <div class="card" style="width: 18rem;">
-            <a href="{% url 'products_details' product.id %}"><img src="{{ product.thumbnail }}" class="card-img-top" alt="{{product.title}}"></a>
+            <a href="{% url 'products_details' product.id %}"><img src="{{ product.image.url }}" class="card-img-top" alt="{{product.title}}"></a>
             <div class="card-body">
                 <p class="card-text" id="text">{{ product.description }}</p>
             </div>

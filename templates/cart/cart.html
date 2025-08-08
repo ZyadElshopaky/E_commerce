@@ -4,7 +4,14 @@
 
 {% block contents %} 
 <div style="padding-top:90px">
-
     <h1>cart</h1>
+        {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            <a href="{% url 'products_details' product.id %}"><img src="{{ product.image.url }}" class="card-img-top" alt="{{product.title}}"></a>
+            <div class="card-body">
+                <p class="card-text" id="text">{{ product.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
 </div>
 {% endblock %}

@@ -9,7 +9,7 @@ from .forms import *
 def signup_user(request):
     form = SignupForm() 
     if request.method == "POST":
-        form = SignupForm(request.POST)
+        form = SignupForm(request.POST , request.FILES)
         if form.is_valid():
             user = form.save()
             login(request, user)
@@ -57,14 +57,17 @@ def login_user(request):
 
 
 def logout_user(request):
+    cart = request.session.get('cart', {})
     logout(request)
+    request.session['cart'] = cart
+    request.session.modified = True
     return redirect("home")
 
 
 @login_required(login_url="login")
 def select_role_view(request):
     if  request.user.is_seller :
-        return redirect("seller")
+        return redirect("profile")
     
     if request.method == "POST":
         role = request.POST.get("role")
@@ -75,13 +78,23 @@ def select_role_view(request):
             seller=CustomUser.objects.get(id=request.user.id)
             seller.is_seller=True
             seller.save()
-            return redirect(request,"seller")
+            return redirect("profile")
         elif role == "admin":
             return redirect("contact_us")
     return render(request, "accounts/role_selection.html")
 
 @login_required(login_url="login")
-def seller(request):
-    if not request.user.is_seller :
-        return redirect("seller")
-    return render(request, 'accounts/seller.html')
+def profile(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    if request.method == "POST":
+        form = ProfileUpdateForm(request.POST , request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("profile")
+    else:
+        form = ProfileUpdateForm(instance=request.user)
+
+    return render(request, "accounts/profile.html", {"form": form})

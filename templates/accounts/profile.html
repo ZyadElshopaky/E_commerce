@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block show_navbar %}{% endblock %}
+{% block contents %}
+
+<style>
+  .fixed-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    border-right: 1px solid #ddd;
+    padding: 30px 20px;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .fixed-sidebar .profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 2px solid #aaa;
+  }
+
+  .fixed-sidebar h5 {
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #fff;
+  }
+
+  .fixed-sidebar .nav-link {
+    font-size: 17px;
+    color: #fff !important;
+    margin-bottom: 15px;
+    transition: 0.2s;
+  }
+
+  .fixed-sidebar .nav-link i {
+    font-size: 22px;
+    width: 30px;
+    color: #fff !important;
+  }
+
+  .fixed-sidebar .nav-link:hover {
+    color: #dc3545 !important;
+    font-weight: 500;
+  }
+
+  .fixed-sidebar .nav-link:hover i {
+    color: #dc3545 !important;
+  }
+
+  .main-content {
+    margin-left: 270px;
+    padding: 30px;
+  }
+
+  .profile-card,
+  .card-section {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    height: 100%;
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+
+  .hover-effect:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+    transition: 0.3s ease;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .profile-card {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+  }
+</style>
+
+{% if messages %}
+<div id="flash-messages" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    width: 300px;">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="fixed-sidebar text-center" style="  background-color: rgba(0, 0, 0, 0.6) !important;">
+
+  <img
+    src="{{ user.image.url }}"
+    alt="Profile" class="profile-img">
+
+
+  <h5>{{ user.username }}</h5>
+
+  <ul class="nav flex-column text-start">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'profile' %}"> <i class="fas fa-user-circle"></i> My Info</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+    </li>
+    {% if user.is_seller %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'my_products' %}"><i class="fas fa-th-large"></i>My Products</a>
+    </li>
+    {%endif%}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'orders' %}"><i class="fas fa-box-open"></i> My Orders</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </li>
+  </ul>
+</div>
+
+
+<div class="main-content" style="margin-left: 270px; padding: 30px;">
+  <div class="container-fluid">
+    <div class="row g-4">
+
+      <div class="col-md-3 d-flex" style="margin: auto;">
+        <div class="profile-card card-content w-100">
+
+          <img
+            src="{{ user.image.url }}"
+            class="profile-img hover-effect" alt="Profile" data-bs-toggle="modal" data-bs-target="#editProfileModal"
+            style="cursor: pointer;">
+          <h5>{{ user.username }}</h5>
+          <p><i class="fas fa-envelope"></i> {{ user.email }}</p>
+          <p><i class="fas fa-phone"></i> {{ user.phone }}</p>
+        </div>
+      </div>
+
+      <div class="col-md-9">
+        <div class="row g-4">
+
+          <div class="col-md-6">
+            <div class="card-section h-100">
+              <h5>Account Details</h5>
+              <hr>
+              <p><strong>First Name:</strong> {{ user.first_name }}</p>
+              <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+              <p><strong>Date of Birth:</strong> {{ user.date_Birth }}</p>
+              <p><strong>Gender:</strong> {{user.gender}}</p>
+            </div>
+          </div>
+
+          <!-- 🏠 Address -->
+          <div class="col-md-6">
+            <div class="card-section h-100">
+              <h5>Shipping Address</h5>
+              <hr>
+              <p><strong>Address:</strong> 123 Nile Street</p>
+              <p><strong>City:</strong> Cairo</p>
+              <p><strong>Country:</strong> Egypt</p>
+              <p><strong>Zip Code:</strong> 12345</p>
+            </div>
+          </div>
+
+
+          <div class="col-md-6">
+            <div class="card-section h-100">
+              <h5>Payment Method</h5>
+              <hr>
+              <p><strong>Card Type:</strong> VISA</p>
+              <p><strong>Card Holder:</strong> Mark Anderson</p>
+              <p><strong>Expire:</strong> 12/31</p>
+              <p><strong>Card Number:</strong> 0123 4567 8910 1112</p>
+              <p><strong>Balance:</strong> $1,000,000</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-section h-100">
+              <h5>Order Summary</h5>
+              <hr>
+              <p><strong>Total Orders:</strong> 25</p>
+              <p><strong>Pending:</strong> 3</p>
+              <p><strong>Delivered:</strong> 20</p>
+              <p><strong>Cancelled:</strong> 2</p>
+              <a href="{% url 'orders' %}" class="btn btn-outline-danger btn-sm mt-2">View All Orders</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" class="mt-3" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    setTimeout(() => {
+        const alerts = document.querySelectorAll('#flash-messages .alert');
+        alerts.forEach(alert => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 4000);
+</script>
+
+{% endblock %}
