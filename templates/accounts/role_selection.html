@@ -1,34 +1,65 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Product List {% endblock %}
+{% block title %} Role Selection {% endblock %}
 
-{% block contents %} 
-<form method="post" action="{% url 'role_selection' %}" style="padding-top:250px; text-align:center;">
-    {% csrf_token %}
-    <div class="role-container">
-        <h2>اختر دورك</h2>
-        <div class="role-buttons" style="display:inline-flex; gap:1rem; margin-top:1rem;">
-            <label class="role-button" style="cursor:pointer; padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px; display:flex; flex-direction:column; align-items:center; min-width:120px;">
-                <input type="radio" name="role" value="buyer" required style="margin-bottom:8px;">
-                <i class="fas fa-shopping-cart" aria-hidden="true" style="font-size:24px;"></i>
-                <div>مشتري</div>
+{% block contents %}
+<div class="role-selection-container" style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f8f9fa;">
+    <form method="post" action="{% url 'role_selection' %}" style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 600px;">
+        {% csrf_token %}
+        <div class="role-header" style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="color: #2c3e50; font-weight: 600; margin-bottom: 0.5rem;">Select Your Role</h2>
+            <p style="color: #7f8c8d;">Choose how you want to use the platform</p>
+        </div>
+
+        <div class="role-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <label class="role-card" style="border: 1px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s ease;">
+                <input type="radio" name="role" value="buyer" required style="display: none;">
+                <div class="role-icon" style="background-color: #e3f2fd; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-shopping-cart" style="font-size: 24px; color: #1976d2;"></i>
+                </div>
+                <div class="role-title" style="font-weight: 500; color: #2c3e50;">Buyer</div>
+                <div class="role-desc" style="font-size: 0.8rem; color: #7f8c8d; margin-top: 0.5rem;">Browse and purchase products</div>
             </label>
 
-            <label class="role-button" style="cursor:pointer; padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px; display:flex; flex-direction:column; align-items:center; min-width:120px;">
-                <input type="radio" name="role" value="seller" required style="margin-bottom:8px;">
-                <i class="fas fa-store" aria-hidden="true" style="font-size:24px;"></i>
-                <div>بائع</div>
+            <label class="role-card" style="border: 1px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s ease;">
+                <input type="radio" name="role" value="seller" required style="display: none;">
+                <div class="role-icon" style="background-color: #e8f5e9; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-store" style="font-size: 24px; color: #388e3c;"></i>
+                </div>
+                <div class="role-title" style="font-weight: 500; color: #2c3e50;">Seller</div>
+                <div class="role-desc" style="font-size: 0.8rem; color: #7f8c8d; margin-top: 0.5rem;">List and manage your products</div>
             </label>
 
-            <label class="role-button" style="cursor:pointer; padding:1rem 1.5rem; border:1px solid #ccc; border-radius:8px; display:flex; flex-direction:column; align-items:center; min-width:120px;">
-                <input type="radio" name="role" value="admin" required style="margin-bottom:8px;">
-                <i class="fas fa-user-shield" aria-hidden="true" style="font-size:24px;"></i>
-                <div>أدمن</div>
+            <label class="role-card" style="border: 1px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s ease;">
+                <input type="radio" name="role" value="admin" required style="display: none;">
+                <div class="role-icon" style="background-color: #f3e5f5; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-user-shield" style="font-size: 24px; color: #8e24aa;"></i>
+                </div>
+                <div class="role-title" style="font-weight: 500; color: #2c3e50;">Admin</div>
+                <div class="role-desc" style="font-size: 0.8rem; color: #7f8c8d; margin-top: 0.5rem;">Manage platform settings</div>
             </label>
         </div>
-        <div style="margin-top:1.5rem;">
-            <button type="submit" style="padding:0.75rem 1.5rem; border:none; border-radius:6px; cursor:pointer;">استمرار</button>
+
+        <div class="role-submit" style="text-align: center;">
+            <button type="submit" style="background-color: #1976d2; color: white; border: none; padding: 0.8rem 2rem; border-radius: 10px; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease; width: 100%; max-width: 200px;">
+                Continue
+            </button>
         </div>
-    </div>
-</form>
+    </form>
+</div>
+<style>
+    .role-card:hover {
+        border-color: #1976d2 !important;
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    
+    input[type="radio"]:checked + .role-icon {
+        border: 2px solid #1976d2;
+    }
+    
+    button:hover {
+        background-color: #1565c0 !important;
+    }
+</style>
 {% endblock %}

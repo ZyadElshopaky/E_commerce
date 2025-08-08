@@ -1,19 +1,37 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Product</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="p-5">
-<div class="container mt-5">
-    <h2>Edit Product</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a href="{% url 'my_products' %}" class="btn btn-secondary">Cancel</a>
+{% block title %}Edit Product{% endblock %}
+
+{% block contents %}
+<div class="container">
+  <div class="cardd product-form-cardd">
+    <h2 class="text-center mb-4">Edit Product</h2>
+    <hr class="product-form-divider">
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <label class="form-label">Created by</label>
+        <input type="text" name="created_at" value="{{ user.username }}" class="form-control" disabled>
+      </div>
+
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{% url 'my_products' %}" class="btn btn-secondary">Cancel</a>
     </form>
+  </div>
 </div>
-</body>
-</html>
+{% endblock %}

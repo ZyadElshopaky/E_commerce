@@ -1,68 +1,90 @@
-{% if request.path != '/profile/' and request.path != '/login/' and request.path != '/signup/' and request.path != '/payment/'   %}
+{% if request.path != '/login/' and request.path != '/signup/' and request.path != '/payment/' and request.path != '/profile/'  %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top custom-navbar">
-  <div class="container-fluid position-relative">
-    <a class="navbar-brand custom-logo" href="{% url 'home' %}">ZAYO</a>
-    <a class="nav-link custom-nav-link ms-3" href="{% url 'home' %}">
-      <i class="fas fa-home me-1 "></i> Home
-    </a>
 
-    <a class="nav-link custom-nav-link ms-4" href="{% url 'products' %}">
-      <i class="fas fa-th-large me-1"></i> Products
-    </a>
-    
-    <a class="nav-link custom-nav-link ms-4" href="{% url 'contact_us' %}">
-      <i class="fas fa-envelope me-1"></i> Contact Us
-    </a>
+<div id="sidebar" class="sidebar text-center">
+    <img src="{{ user.image.url }}" alt="profile" class="profile-img">
 
+  <h5>{{ user.username }}</h5>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <form class="position-absolute start-50 top-50 translate-middle" method="get" action="{% url 'home' %}">
-      <div class="input-group">
-        <input type="search" name="q" class="form-control border-danger custom-placeholder"
-          placeholder="Search products" aria-label="Search">
-        <button class="btn btn-outline-danger" type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </form>
-
-    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-      <ul class="navbar-nav gap-3 align-items-center">
-        <li class="nav-item">
-          <a class="nav-link custom-nav-link" href="{% url 'orders' %}">
-            <i class="fas fa-box me-1"></i> Orders
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link custom-nav-link" href="{% url 'cart' %}">
-            <i class="fas fa-shopping-cart me-1"></i> Cart
-          </a>
-        </li>
-        
-      {% if user.is_authenticated %}
-      <a class="btn  ms-4 btn-danger btn-lg" href="{% url 'profile' %}">
-        <i class="fas fa-user me-1"></i> Profile
+  <ul class="nav flex-column text-start">
+    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}" > <i class="fas fa-user-circle"></i>Profile</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
+    <li class="nav-item">
+      <a class="nav-link d-flex justify-content-between align-items-center" href="#" id="categoriesToggle">
+          <span><i class="fas fa-list"></i> Categories</span>
+          <i class="fas fa-chevron-down category-arrow"></i>
       </a>
-      {% else %}
-        <li class="nav-item">
-          <a href="{% url 'login' %}" class="btn btn-danger btn-lg">
-            <i class="fas fa-user me-1"></i> log in
-          </a>
-        </li>
-      {% endif %}
-
+      <ul class="nav flex-column ms-3 collapse" id="categoriesList">
+          <li class="nav-item"><a class="nav-link" href="{% url 'products' category_id=1 %}"><i class="fas fa-spa"></i> Beauty</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'products' category_id=2 %}"><i class="fas fa-spray-can"></i> Fragrances</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'products' category_id=3 %}"><i class="fas fa-couch"></i> Furniture</a></li>
       </ul>
-    </div>
-  </div>
-</nav>
+    </li>
+    {% if user.is_seller %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'my_products' %}"><i class="fas fa-th-large"></i>Products</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'chart' %}"><i class="fas fa-chart-bar"></i> Chart</a></li>
+  {%endif%}
+    <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'orders' %}"><i class="fas fa-box-open"></i> Orders</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}"><i class="fas fa-envelope"></i>Contact Us</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+  </ul>
 
+</div>
+
+  <nav class="navbar navbar-expand-lg sticky-navbar">
+    <div class="container-fluid position-relative">
+
+      <button id="toggleSidebar" class="me-3" type="button">
+        <i class="fas fa-solid fa-sharp fa-bars"></i>
+      </button>
+
+      <a class="navbar-brand custom-logo" href="{% url 'home' %}">royal</a>
+
+
+<form class="search-form position-absolute start-50 top-50 translate-middle" method="get" action="{% url 'home' %}">
+  <div class="position-relative">
+    <input type="search" name="q" class="form-control search-input ps-3 pe-5" placeholder="Search products" aria-label="Search">
+    <i class="fas fa-search search-icon"></i>
+  </div>
+</form>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav gap-3 align-items-center">
+
+
+
+          {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}" class="ms-4">
+            <img src="{{ user.image.url }}" alt="profile" class="profile-img-navbar">
+          </a>
+          {% else %}
+          <li class="nav-item">
+            <a href="{% url 'login' %}" class="btn btn-danger btn-lg">
+              <i class="fas fa-user me-1"></i> Log in
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+  document.querySelectorAll('img').forEach(img => {
+    img.onerror = () => {
+      img.src = 'https://thfvnext.bing.com/th/id/OIP.vU85mSYWrNQP9SzYGxzP1gHaHa?w=193&h=193&c=7&r=0&o=7&cb=thfvnext&pid=1.7&rm=3';
+    };
+  });
+  
+    document.getElementById("categoriesToggle").addEventListener("click", function(e){
+        e.preventDefault();
+        document.getElementById("categoriesList").classList.toggle("show");
+        document.querySelector(".category-arrow").classList.toggle("rotate");
+    });
+
+
+</script>
 {% endif %}

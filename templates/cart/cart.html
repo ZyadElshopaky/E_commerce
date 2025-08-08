@@ -1,17 +1,107 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %} Product List {% endblock %}
+{% block title %}Cart{% endblock %}
 
-{% block contents %} 
-<div style="padding-top:90px">
-    <h1>cart</h1>
-        {% for product in products %}
-        <div class="card" style="width: 18rem;">
-            <a href="{% url 'products_details' product.id %}"><img src="{{ product.image.url }}" class="card-img-top" alt="{{product.title}}"></a>
-            <div class="card-body">
-                <p class="card-text" id="text">{{ product.description }}</p>
+{% block contents %}
+<div class="container py-5">
+    <div class="cart-container">
+        <h2 class="cart-title">Your Shopping Cart</h2>
+
+        <div class="cart-items">
+            {% for product in products %}
+            <div class="cart-item">
+                <img src="{{ product.image.url }}" alt="Product" class="item-image">
+                <div class="item-info">
+                    <div class="item-name">{{ product.title }}</div>
+                    <div class="item-price">${{ product.price }}</div>
+                </div>
+
+                <div class="quantity-control">
+                    <button class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+                    <input type="number" class="quantity-input" value="{{product.qty}}" min="1">
+                    <button class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+                </div>
+                <button class="action-btn update-btn" data-id="{{product.id}}" onclick="AddProduct(this)">
+                    <i class="fas fa-sync-alt"></i> <span>Update</span>
+                </button>
+                <button class="action-btn delete-btn" data-id="{{product.id}}" onclick="deleteFromCart(this)">
+                    <i class="fas fa-trash"></i> <span>Delete</span>
+                </button>
+            </div>
+            {%endfor%}
+
+
+            <div class="checkout-section">
+                <div class="cart-total">
+                    Total: <span class="total-amount">$828.00</span>
+                </div>
+                <button class="checkout-btn">Checkout</button>
             </div>
         </div>
-        {% endfor %}
-</div>
-{% endblock %}
+    </div>
+    <script>
+        function updateQuantity(button, change) {
+            let input = button.parentElement.querySelector(".quantity-input");
+            let currentValue = parseInt(input.value) || 1;
+            let newValue = currentValue + change;
+            if (newValue < 1) newValue = 1;
+            input.value = newValue;
+        }
+        function AddProduct(btn) {
+            let input = document.querySelector(".quantity-input");
+            fetch('/cart/add/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    id: btn.dataset.id,
+                    qty: input.value
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        function deleteFromCart(btn) {
+            let productId = btn.dataset.id;
+
+            fetch('/cart/delete/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ id: productId })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    btn.parentElement.remove()
+                })
+                .catch(err => console.error(err));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+    </script>
+
+    {% endblock %}

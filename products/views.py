@@ -2,16 +2,32 @@ from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from django.views.decorators.cache import never_cache
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import *
+from .models import Product,category
 
 def home(request):
-    products=Product.objects.all()
-    return render(request,'home.html',{'products':products})
+    query = request.GET.get('q')  
+    products = Product.objects.all()
 
-def products(request):
-    products=Product.objects.all()
-    return render(request, 'products/products.html',{'products':products})
+    if query:
+        products = products.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+
+    return render(request, 'home.html', {'products': products,})
+
+
+def products(request,category_id):
+    products = Product.objects.all()
+    if category_id:
+        products = products.filter(category_id=category_id)
+    print(products)
+    return render(request, 'products/products.html', {
+        'products': products,
+    })
+
 
 @login_required
 def create_product(request):
@@ -90,10 +106,10 @@ def my_products(request):
 @never_cache
 def products_details(request, product_id):
     product=Product.objects.get(id=product_id)
-    qty = None
     cart = request.session.get("cart", {})
-    if str(product_id) in cart:
-        qty = cart[str(product_id)]["quantity"]
     if product:
-        return render(request, 'products/products_details.html', {'product': product,"qty":qty})
+        return render(request, 'products/products_details.html', {'product': product,"in_cart":  str(product.id) in cart})
     return render(request, '404.html', status=404)
+
+def chart(request):
+    return render(request,'products/chart.html')

@@ -1,46 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-{{ product.title }} - Product Details
+{% block title %} 
+    {{ product.title }} - Product Details
 {% endblock %}
 
-{% block contents %}
+{% block contents %} 
 <div class="page-content">
-  <div class="container py-5">
+<div class="container py-5">
     <h1>{{ product.title }}</h1>
     <hr>
     <div class="row">
-      <div class="col-md-6">
-        <img src="{{ product.image.url }}" data-id="{{product.id}}" class="img-fluid rounded" style="max-height: 400px;"
-          alt="{{ product.title }}">
-      </div>
-      <div class="col-md-6">
-        <h2>Price: ${{ product.price }}</h2>
-        <p>{{ product.description }}</p>
-          <div class="mb-3">
-            <label for="quantity" class="form-label">Quantity</label>
-            {%if qty%}
-              <input type="number" id="quantity" name="quantity" class="form-control" value="{{ qty }}" disabled min="1"
-                max="{{ product.stock }}">
-                <div class="btn-order">
-                  <a href="#" data-id="{{product.id}}" class="canceled" onclick="ch(this)">cancele</a>
-                  <a href="/orders/">cancele</a>
-                </div>
-            {%else%}
-              <input type="number" id="quantity" name="quantity"  class="form-control" value="1" min="1"
-                max="{{ product.stock }}">
-              </div>
-              <div class="btn-order">
-                  <a href="#" data-id="{{product.id}}" onclick="ch(this)">add Cart</a>
-                  <a href="/orders/">View Orders</a>
-              </div>
-            {%endif%}
-      </div>
-    </div>
+        <div class="col-md-6">
+            <img src="{{ product.image.url }}" class="img-fluid rounded" style="max-height: 400px;" alt="{{ product.title }}">
+        </div>
+        <div class="col-md-6">
+            <h2>Price: ${{ product.price }}</h2>
+            <p>{{ product.description }}</p>
+            <div class="btn-order">
+              {% if in_cart %}
+                <a href="#" data-id="{{product.id}}" class="canceled" onclick="ch(this)">cancele</a>
+              {%else%}
+                <a href="#" data-id="{{product.id}}" class="canceled" onclick="ch(this)">Order</a>
+              {%endif%}
+                <a href="{% url 'cart' %}">View cart</a>
+            </div>
+        </div>
+    </div> 
 
-    <script>
-      const quantity = document.getElementById("quantity")
+<script>
       function ch(btn) {
         if(btn.className == "canceled"){
           deleteFromCart(btn)
@@ -57,14 +45,12 @@
           },
           body: JSON.stringify({
             id: btn.dataset.id,
-            qty: +quantity.value > +quantity.max ? +quantity.max : +quantity.value,
           })
         })
           .then(response => response.json())
           .then(data => {
             btn.classList.add("canceled");
             btn.innerHTML = "Cancel";
-            quantity.disabled = true;
           })
           .catch(error => {
             console.error('Error:', error);
@@ -85,9 +71,7 @@
           .then(res => res.json())
           .then(data => {
             btn.className=""
-            btn.innerHTML = "add Cart";
-            quantity.disabled = false;
-            quantity.value = 1;
+            btn.innerHTML = "Order";
           })
           .catch(err => console.error(err));
       }
@@ -108,4 +92,4 @@
         return cookieValue;
       }
     </script>
-    {% endblock %}
+{% endblock %}
